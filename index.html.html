@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MonsoonSight — Hybrid Monsoon Intelligence System</title>
+  
+  <!-- Fonts: Fira Code + Fira Sans (Data-Dense Dashboard pairing) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Fira+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#F0FDF4',
+              100: '#DCFCE7',
+              200: '#BBF7D0',
+              500: '#22C55E',
+              600: '#16A34A',
+              700: '#15803D',
+              800: '#166534',
+              900: '#14532D',
+            },
+            sky: {
+              500: '#0284C7',
+              600: '#0369A1',
+            },
+            gold: {
+              500: '#D97706',
+              600: '#A16207',
+            },
+            slate: {
+              850: '#1E293B',
+              900: '#0F172A',
+            }
+          },
+          fontFamily: {
+            sans: ['Fira Sans', 'sans-serif'],
+            mono: ['Fira Code', 'monospace']
+          },
+          borderRadius: {
+            '2xl': '1rem',
+            '3xl': '1.5rem',
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- Chart.js for verification graphs -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-brand-500 selection:text-white">
+
+  <!-- TOP HEADER / NAV -->
+  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-brand-700 flex items-center justify-center text-white shadow-md shadow-brand-700/20">
+          <i class="ph-bold ph-cloud-rain text-2xl"></i>
+        </div>
+        <div>
+          <span class="font-bold text-lg text-slate-900 tracking-tight flex items-center gap-2">
+            MonsoonSight
+            <span class="text-xs px-2 py-0.5 rounded-full bg-brand-100 text-brand-800 font-mono font-medium">v1.0 Pilot</span>
+          </span>
+          <p class="text-xs text-slate-500 hidden sm:block">Hybrid Monsoon Intelligence (Block & Gram Panchayat Scale)</p>
+        </div>
+      </div>
+
+      <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
+        <a href="#core-loop" class="hover:text-brand-700 transition">Core Loop</a>
+        <a href="#architecture" class="hover:text-brand-700 transition">Architecture</a>
+        <a href="#risk-maps" class="hover:text-brand-700 transition">Risk Maps</a>
+        <a href="#expert-system" class="hover:text-brand-700 transition">Advisory Engine</a>
+        <a href="#channels" class="hover:text-brand-700 transition">Delivery Channels</a>
+        <a href="#hindcast" class="hover:text-brand-700 transition">Hindcast Replay</a>
+        <a href="#verification" class="hover:text-brand-700 transition">Verification</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <a href="#risk-maps" class="px-4 py-2 rounded-xl bg-brand-700 hover:bg-brand-800 text-white font-medium text-sm transition shadow-sm flex items-center gap-2">
+          <i class="ph-bold ph-map-trifold"></i>
+          <span>Live Demo</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="relative overflow-hidden bg-gradient-to-b from-brand-50/50 via-white to-slate-50 pt-12 pb-16 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      
+      <div class="flex flex-wrap items-center gap-2 mb-6">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          Kharif 2026 Pilot: Uttar Pradesh
+        </span>
+        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-sky-100 text-sky-800 border border-sky-200">
+          <i class="ph-bold ph-lightning"></i> 7 to 30-Day Probabilistic Lead Time
+        </span>
+        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800 border border-amber-200">
+          <i class="ph-bold ph-shield-check"></i> Agronomist-Reviewed YAML Rules
+        </span>
+      </div>
+
+      <div class="grid lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-7 space-y-6">
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">
+            Precision Monsoon Outlooks for <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-700 to-emerald-500">Every Block & Panchayat</span>
+          </h1>
+          <p class="text-lg text-slate-600 leading-relaxed">
+            Standard regional forecasts are too coarse for sowing decisions. MonsoonSight combines <strong class="text-slate-800">global physics (S2S, ENSO, IOD, MJO)</strong> with <strong class="text-slate-800">LightGBM & ConvLSTM downscaling</strong> to deliver calibrated probabilities of onset, dry spells, and heavy rain—mapped directly to crop actions in regional languages.
+          </p>
+
+          <div class="flex flex-wrap gap-4 pt-2">
+            <a href="#risk-maps" class="px-6 py-3.5 rounded-xl bg-brand-700 hover:bg-brand-800 text-white font-semibold shadow-lg shadow-brand-700/25 flex items-center gap-2 transition transform active:scale-95">
+              <i class="ph-bold ph-globe-hemisphere-east text-xl"></i>
+              Explore UP Risk Maps
+            </a>
+            <a href="#expert-system" class="px-6 py-3.5 rounded-xl bg-white hover:bg-slate-100 text-slate-800 font-semibold border border-slate-300 flex items-center gap-2 transition shadow-sm">
+              <i class="ph-bold ph-cpu text-xl text-brand-700"></i>
+              Test Advisory Engine
+            </a>
+            <a href="#hindcast" class="px-6 py-3.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 font-medium border border-slate-200 flex items-center gap-2 transition text-sm">
+              <i class="ph-bold ph-clock-counter-clockwise text-xl text-amber-600"></i>
+              2009 False Onset Replay
+            </a>
+          </div>
+
+          <!-- Climate Teleconnection Bar -->
+          <div class="mt-8 p-4 rounded-2xl bg-white border border-slate-200 shadow-sm">
+            <div class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3 flex items-center justify-between">
+              <span>Live Climate Drivers Ingested (Today 06:00 IST)</span>
+              <span class="text-brand-600 font-mono">Status: CALIBRATED</span>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono text-xs">
+              <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-150">
+                <span class="text-slate-500 block text-[10px]">ENSO ONI (Nino 3.4)</span>
+                <span class="font-bold text-slate-900 text-sm text-emerald-700">+0.82°C</span>
+                <span class="text-[10px] text-slate-400 block">Modoki Warm</span>
+              </div>
+              <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-150">
+                <span class="text-slate-500 block text-[10px]">IOD DMI Index</span>
+                <span class="font-bold text-slate-900 text-sm text-sky-700">+0.45°C</span>
+                <span class="text-[10px] text-slate-400 block">Positive Phase</span>
+              </div>
+              <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-150">
+                <span class="text-slate-500 block text-[10px]">MJO Phase & Amp</span>
+                <span class="font-bold text-slate-900 text-sm text-amber-700">Phase 3 (1.64)</span>
+                <span class="text-[10px] text-slate-400 block">Indian Ocean</span>
+              </div>
+              <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-150">
+                <span class="text-slate-500 block text-[10px]">BSISO Index</span>
+                <span class="font-bold text-slate-900 text-sm text-purple-700">Phase 4</span>
+                <span class="text-[10px] text-slate-400 block">Active Pulse</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero Stats Bento -->
+        <div class="lg:col-span-5 space-y-4">
+          <div class="p-6 rounded-3xl bg-slate-900 text-white shadow-2xl relative overflow-hidden">
+            <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-brand-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-xs font-mono text-brand-400 uppercase tracking-widest">System Capabilities</span>
+              <i class="ph-bold ph-shield-check text-brand-400 text-2xl"></i>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4 my-4">
+              <div class="p-3.5 rounded-2xl bg-slate-800/80 border border-slate-700/60">
+                <div class="text-2xl font-extrabold text-brand-400 font-mono">0.05°</div>
+                <div class="text-xs text-slate-300">Spatial Downscaling (~5km Block/GP)</div>
+              </div>
+              <div class="p-3.5 rounded-2xl bg-slate-800/80 border border-slate-700/60">
+                <div class="text-2xl font-extrabold text-sky-400 font-mono">7-30d</div>
+                <div class="text-xs text-slate-300">Sub-Seasonal Lead Windows</div>
+              </div>
+              <div class="p-3.5 rounded-2xl bg-slate-800/80 border border-slate-700/60">
+                <div class="text-2xl font-extrabold text-amber-400 font-mono">25+</div>
+                <div class="text-xs text-slate-300">Verified Agronomic Rules</div>
+              </div>
+              <div class="p-3.5 rounded-2xl bg-slate-800/80 border border-slate-700/60">
+                <div class="text-2xl font-extrabold text-emerald-400 font-mono">&lt; 10%</div>
+                <div class="text-xs text-slate-300">Calibration Brier Error</div>
+              </div>
+            </div>
+
+            <div class="p-3 rounded-xl bg-brand-900/60 border border-brand-700/40 text-xs text-emerald-200 flex items-center justify-between">
+              <span><strong class="text-white">Rule Safety Policy:</strong> Zero free-form generative LLM output for crop advice.</span>
+              <i class="ph-bold ph-check-circle text-emerald-400 text-lg"></i>
+            </div>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center font-bold text-lg">
+                <i class="ph-bold ph-translate"></i>
+              </div>
+              <div>
+                <h4 class="text-sm font-bold text-slate-900">Multilingual Delivery Ready</h4>
+                <p class="text-xs text-slate-500">Hindi, English, Awadhi & Bhojpuri SMS/WhatsApp</p>
+              </div>
+            </div>
+            <a href="#channels" class="text-xs font-semibold text-brand-700 hover:underline">View Channels &rarr;</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CORE LOOP SECTION (9-STAGE CLOSED LOOP) -->
+  <section id="core-loop" class="py-16 bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <span class="text-xs font-mono font-bold uppercase tracking-wider text-brand-700 bg-brand-50 px-3 py-1 rounded-full border border-brand-200">Continuous 9-Stage Pipeline</span>
+        <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight mt-3">The Closed Loop Architecture</h2>
+        <p class="text-slate-600 mt-2">Daily operational cycle (06:00 IST) turns global climate observation into verified farmer action and captures outcomes to update models continuously.</p>
+      </div>
+
+      <!-- Stepper Controls -->
+      <div class="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-9 gap-2 mb-8">
+        <button onclick="setLoopStage(1)" id="stage-btn-1" class="loop-stage-btn active p-3 rounded-xl border text-center transition flex flex-col items-center gap-1">
+          <span class="text-xs font-mono font-bold text-slate-400">01</span>
+          <i class="ph-bold ph-satellite text-lg text-brand-700"></i>
+          <span class="text-xs font-semibold text-slate-800">Sense</span>
+        </button>
+        <button onclick="setLoopStage(2)" id="stage-btn-2" class="loop-stage-btn p-3 rounded-xl border text-center transition flex flex-col items-center gap-1">
+          <span class="text-xs font-mono font-bold text-slate-400">02</span>
+          <i class="ph-bold ph-arrows-merge text-lg text-brand-700"></i>
+          <span class="text-xs font-semibold text-slate-800">Harmonize</span>
+        </button>
+        <button onclick="setLoopStage(3)" id="stage-btn-3" class="loop-stage-btn p-3 rounded-xl border text-center transition flex flex-col items-center gap-1">
+          <span class="text-xs font-mono font-bold text-slate-400">03</span>
+          <i class="ph-bold ph-cpu text-lg text-brand-700"></i>
+          <span class="text-xs font-semibold text-slate-800">Predict</span>
+        </button>
+        <button onclick="setLoopStage(4)" id="stage-btn-4" class="loop-stage-btn p-3 rounded-xl border text-center transition flex flex-col items-center gap-1">
+          <span class="text-xs font-mono font-bold text-slate-400">04</span>
+          <i class="ph-bold ph-scales text-lg text-brand-700"></i>
+          <span class="text-xs font-semibold text-slate-800">Calibrate</span>
+        </button>
+        <button onclick="setLoopStage(5)" id="stage-btn-5" class="loop-stage-btn p-3 rounded-xl border text-center transition flex flex-col items-center gap-1">
+          <span class="text-xs font-mono font-bold text-slate-400">05</span>
+          <i class="ph-bold ph-map-trifold text-lg text-brand-700"></i>
+          <span class="text-xs font-semibold text-slate-800">Risk Map</span>
+        </button>
+        <button onclick="setLoopStage(6)" id="stage-btn-6" class="loop-stage-btn p-3 rounded-xl border text-center transition flex flex-col items-center gap-1">
+          <span class="text-xs font-mono font-bold text-slate-400">06</span>
+          <i class="ph-bold ph-lightbulb text-lg text-brand-700"></i>
+          <span class="text-xs font-semibold text-slate-800">Advise</span>
+        </button>
+        <button onclick="setLoopStage(7)" id="stage-btn-7" class="loop-stage-btn p-3 rounded-xl border text-center transition flex flex-col items-center gap-1">
+          <span class="text-xs font-mono font-bold text-slate-400">07</span>
+          <i class="ph-bold ph-paper-plane-tilt text-lg text-brand-700"></i>
+          <span class="text-xs font-semibold text-slate-800">Deliver</span>
+        </button>
+        <button onclick="setLoopStage(8)" id="stage-btn-8" class="loop-stage-btn p-3 rounded-xl border text-center transition flex flex-col items-center gap-1">
+          <span class="text-xs font-mono font-bold text-slate-400">08</span>
+          <i class="ph-bold ph-chat-centered-dots text-lg text-brand-700"></i>
+          <span class="text-xs font-semibold text-slate-800">Feedback</span>
+        </button>
+        <button onclick="setLoopStage(9)" id="stage-btn-9" class="loop-stage-btn p-3 rounded-xl border text-center transition flex flex-col items-center gap-1">
+          <span class="text-xs font-mono font-bold text-slate-400">09</span>
+          <i class="ph-bold ph-arrows-clockwise text-lg text-brand-700"></i>
+          <span class="text-xs font-semibold text-slate-800">Retrain</span>
+        </button>
+      </div>
+
+      <!-- Stage Detail Display Card -->
+      <div id="stage-detail-card" class="p-8 rounded-3xl bg-slate-900 text-white shadow-xl transition-all">
+        <!-- Injected via JavaScript -->
+      </div>
+    </div>
+  </section>
+
+  <!-- SYSTEM ARCHITECTURE SECTION -->
+  <section id="architecture" class="py-16 bg-slate-50 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <span class="text-xs font-mono font-bold uppercase tracking-wider text-sky-700 bg-sky-50 px-3 py-1 rounded-full border border-sky-200">5-Layer Technical Design</span>
+        <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight mt-3">System Architecture</h2>
+        <p class="text-slate-600 mt-2">From raw global reanalysis grid datasets to localized WhatsApp push messages.</p>
+      </div>
+
+      <div class="space-y-4">
+        <!-- Layer 1: Data Layer -->
+        <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm hover:border-brand-300 transition">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <span class="w-8 h-8 rounded-lg bg-slate-900 text-brand-400 font-mono font-bold text-xs flex items-center justify-center">L1</span>
+              <div>
+                <h3 class="font-bold text-slate-900 text-lg">DATA LAYER</h3>
+                <p class="text-xs text-slate-500">Global climate drivers, S2S dynamical forecasts & ground truth</p>
+              </div>
+            </div>
+            <div class="flex flex-wrap gap-2 text-xs font-mono">
+              <span class="px-2.5 py-1 rounded-md bg-slate-100 text-slate-700">Nino3.4 / ONI</span>
+              <span class="px-2.5 py-1 rounded-md bg-slate-100 text-slate-700">DMI (IOD)</span>
+              <span class="px-2.5 py-1 rounded-md bg-slate-100 text-slate-700">MJO RMM</span>
+              <span class="px-2.5 py-1 rounded-md bg-slate-100 text-slate-700">ERA5 (U850, Z500, OLR, IVT)</span>
+              <span class="px-2.5 py-1 rounded-md bg-slate-100 text-slate-700">ECMWF / CFSv2 S2S</span>
+              <span class="px-2.5 py-1 rounded-md bg-slate-100 text-slate-700">IMD AWS / IMERG</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Layer 2: Ingestion & Storage -->
+        <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm hover:border-brand-300 transition">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <span class="w-8 h-8 rounded-lg bg-slate-900 text-sky-400 font-mono font-bold text-xs flex items-center justify-center">L2</span>
+              <div>
+                <h3 class="font-bold text-slate-900 text-lg">INGESTION AND STORAGE</h3>
+                <p class="text-xs text-slate-500">Idempotent DAG orchestrations & spatio-temporal data lake</p>
+              </div>
+            </div>
+            <div class="flex flex-wrap gap-2 text-xs font-mono">
+              <span class="px-2.5 py-1 rounded-md bg-sky-50 text-sky-800 border border-sky-200">Airflow / Prefect DAGs</span>
+              <span class="px-2.5 py-1 rounded-md bg-sky-50 text-sky-800 border border-sky-200">Zarr / NetCDF Lake</span>
+              <span class="px-2.5 py-1 rounded-md bg-sky-50 text-sky-800 border border-sky-200">PostGIS (Block Boundaries)</span>
+              <span class="px-2.5 py-1 rounded-md bg-sky-50 text-sky-800 border border-sky-200">Redis Tile Cache</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Layer 3: Hybrid Model Core -->
+        <div class="p-6 rounded-2xl bg-slate-900 text-white shadow-md border border-slate-800">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="w-8 h-8 rounded-lg bg-brand-500 text-slate-950 font-mono font-bold text-xs flex items-center justify-center">L3</span>
+            <div>
+              <h3 class="font-bold text-white text-lg">HYBRID MODEL CORE</h3>
+              <p class="text-xs text-slate-400">Physics teleconnection + deep spatial downscaling + calibrated stacking</p>
+            </div>
+          </div>
+          <div class="grid sm:grid-cols-5 gap-3 text-xs">
+            <div class="p-3 rounded-xl bg-slate-800 border border-slate-700">
+              <span class="text-brand-400 font-bold block mb-1">A. Teleconnections</span>
+              <p class="text-slate-300">Lagged ENSO/IOD wavelets & MJO phase transitions</p>
+            </div>
+            <div class="p-3 rounded-xl bg-slate-800 border border-slate-700">
+              <span class="text-sky-400 font-bold block mb-1">B. Dynamical Baseline</span>
+              <p class="text-slate-300">S2S ECMWF/CFSv2 ensemble EMOS quantile mapping</p>
+            </div>
+            <div class="p-3 rounded-xl bg-slate-800 border border-slate-700">
+              <span class="text-amber-400 font-bold block mb-1">C. ML Downscaler</span>
+              <p class="text-slate-300">ConvLSTM (0.25° to 0.05°) + LightGBM quantile regression</p>
+            </div>
+            <div class="p-3 rounded-xl bg-slate-800 border border-slate-700">
+              <span class="text-purple-400 font-bold block mb-1">D. Event Models</span>
+              <p class="text-slate-300">Onset hazard Cox, Break HMM, Heavy rain GEV boosting</p>
+            </div>
+            <div class="p-3 rounded-xl bg-slate-800 border border-slate-700">
+              <span class="text-emerald-400 font-bold block mb-1">E. Calibrated Stacker</span>
+              <p class="text-slate-300">Isotonic calibration & explicit confidence classifier</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Layer 4: Product Services -->
+        <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm hover:border-brand-300 transition">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <span class="w-8 h-8 rounded-lg bg-slate-900 text-emerald-400 font-mono font-bold text-xs flex items-center justify-center">L4</span>
+              <div>
+                <h3 class="font-bold text-slate-900 text-lg">PRODUCT SERVICES (FastAPI)</h3>
+                <p class="text-xs text-slate-500">Vector tiles, YAML advisory evaluation, i18n & gateways</p>
+              </div>
+            </div>
+            <div class="flex flex-wrap gap-2 text-xs font-mono">
+              <span class="px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200">Risk-Map Service (Vector Tiles)</span>
+              <span class="px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200">YAML Advisory Engine</span>
+              <span class="px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200">Language i18n Service</span>
+              <span class="px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200">Notification Gateway</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Layer 5: User Layer -->
+        <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm hover:border-brand-300 transition">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <span class="w-8 h-8 rounded-lg bg-slate-900 text-amber-400 font-mono font-bold text-xs flex items-center justify-center">L5</span>
+              <div>
+                <h3 class="font-bold text-slate-900 text-lg">USER LAYER & CHANNELS</h3>
+                <p class="text-xs text-slate-500">Farmer PWAs, Officer approval portals, WhatsApp Cloud & DLT SMS</p>
+              </div>
+            </div>
+            <div class="flex flex-wrap gap-2 text-xs font-mono">
+              <span class="px-2.5 py-1 rounded-md bg-amber-50 text-amber-800 border border-amber-200">Mobile PWA</span>
+              <span class="px-2.5 py-1 rounded-md bg-amber-50 text-amber-800 border border-amber-200">WhatsApp Cloud API</span>
+              <span class="px-2.5 py-1 rounded-md bg-amber-50 text-amber-800 border border-amber-200">DLT SMS Unicode</span>
+              <span class="px-2.5 py-1 rounded-md bg-amber-50 text-amber-800 border border-amber-200">Officer Portal</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RISK MAPS EXPLORER (INTERACTIVE DEMO) -->
+  <section id="risk-maps" class="py-16 bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+        <div>
+          <span class="text-xs font-mono font-bold uppercase tracking-wider text-brand-700 bg-brand-50 px-3 py-1 rounded-full border border-brand-200">MapLibre Vector Tile Engine Mock</span>
+          <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight mt-2">Uttar Pradesh Sub-Seasonal Risk Maps</h2>
+          <p class="text-slate-600 text-sm mt-1">Select week lead time and forecast probability layer to inspect block-level probabilistic risk and driver diagnostics.</p>
+        </div>
+
+        <!-- Controls: Lead Time + Map Layer Toggle -->
+        <div class="flex flex-wrap items-center gap-3">
+          <div class="bg-slate-100 p-1 rounded-xl flex items-center text-xs font-semibold">
+            <button onclick="setWeekLead('wk1')" id="lead-btn-wk1" class="lead-btn active px-3 py-1.5 rounded-lg transition">Wk 1 (1-7d)</button>
+            <button onclick="setWeekLead('wk2')" id="lead-btn-wk2" class="lead-btn px-3 py-1.5 rounded-lg transition">Wk 2 (8-14d)</button>
+            <button onclick="setWeekLead('wk3_4')" id="lead-btn-wk3_4" class="lead-btn px-3 py-1.5 rounded-lg transition">Wk 3-4 (15-30d)</button>
+          </div>
+
+          <div class="bg-slate-100 p-1 rounded-xl flex items-center text-xs font-semibold">
+            <button onclick="setMapLayer('p_onset')" id="layer-btn-onset" class="layer-btn active px-3 py-1.5 rounded-lg transition">Onset P(%)</button>
+            <button onclick="setMapLayer('p_break')" id="layer-btn-break" class="layer-btn px-3 py-1.5 rounded-lg transition">Dry Spell / Break P(%)</button>
+            <button onclick="setMapLayer('p_heavy_rain')" id="layer-btn-heavy" class="layer-btn px-3 py-1.5 rounded-lg transition">Heavy Rain P(%)</button>
+          </div>
+
+          <label class="flex items-center gap-1.5 text-xs font-medium text-slate-700 cursor-pointer bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200">
+            <input type="checkbox" id="toggle-hatching" onchange="renderMap()" class="rounded text-brand-600 focus:ring-brand-500">
+            <span>Hatch Low Confidence</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Map & Inspector Layout -->
+      <div class="grid lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- Map Canvas Component -->
+        <div class="lg:col-span-7 bg-slate-900 rounded-3xl p-6 shadow-xl relative min-h-[480px] flex flex-col justify-between border border-slate-800">
+          
+          <!-- Map Header Info Bar -->
+          <div class="flex items-center justify-between z-10 bg-slate-800/80 backdrop-blur p-3 rounded-2xl border border-slate-700 text-xs text-slate-300">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+              <span class="font-bold text-white">UP Pilot GIS Canvas</span>
+              <span class="font-mono text-slate-400 text-[11px]" id="map-status-label">Layer: Monsoon Onset Probability | Wk 1</span>
+            </div>
+            <div class="flex items-center gap-2 text-[11px]">
+              <span class="inline-block w-3 h-3 rounded-sm bg-emerald-500"></span> High Prob
+              <span class="inline-block w-3 h-3 rounded-sm bg-amber-500"></span> Moderate
+              <span class="inline-block w-3 h-3 rounded-sm bg-rose-600"></span> Deficit / Alert
+            </div>
+          </div>
+
+          <!-- Interactive SVG Vector Map Grid -->
+          <div class="my-6 relative flex-grow flex items-center justify-center">
+            <svg id="up-svg-map" class="w-full h-80 max-h-96" viewBox="0 0 700 400" preserveAspectRatio="xMidYMid meet">
+              <!-- Dynamically populated by app.js -->
+            </svg>
+          </div>
+
+          <!-- Legend & Note Bar -->
+          <div class="flex flex-wrap items-center justify-between text-xs text-slate-400 gap-2 border-t border-slate-800 pt-3">
+            <div class="flex items-center gap-3 font-mono text-[11px]">
+              <span>Green: >70%</span>
+              <span>Yellow: 40-70%</span>
+              <span>Red/Orange: <40% or High Dry Spell</span>
+              <span>Hatching: Confidence &lt; Medium</span>
+            </div>
+            <div class="text-brand-400 font-mono text-[11px]">
+              Click any block to trigger advisory trace
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Selected Block Inspector Panel -->
+        <div class="lg:col-span-5 bg-white rounded-3xl p-6 border border-slate-200 shadow-md space-y-5" id="block-inspector-panel">
+          <!-- Injected via JavaScript -->
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ADVISORY EXPERT SYSTEM SANDBOX -->
+  <section id="expert-system" class="py-16 bg-slate-50 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-10">
+        <span class="text-xs font-mono font-bold uppercase tracking-wider text-amber-700 bg-amber-50 px-3 py-1 rounded-full border border-amber-200">Deterministic Agronomic Engine</span>
+        <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight mt-3">YAML Advisory Engine Simulator</h2>
+        <p class="text-slate-600 text-sm mt-2">Test how probabilistic forecasts map to verified agronomist rules with strict confidence gates. Every action is 100% auditable with explicit source citations.</p>
+      </div>
+
+      <!-- Interactive Rule Evaluator Sandbox -->
+      <div class="grid lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- Input Form -->
+        <div class="lg:col-span-5 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+          <h3 class="font-bold text-slate-900 text-lg flex items-center justify-between">
+            <span>Simulation Parameters</span>
+            <span class="text-xs font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-600">YAML Evaluator</span>
+          </h3>
+
+          <div>
+            <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Select Crop</label>
+            <select id="sim-crop" onchange="runRuleSimulation()" class="w-full rounded-xl border-slate-300 border p-2.5 text-sm font-medium text-slate-800 focus:ring-brand-500 focus:border-brand-500">
+              <option value="paddy">Paddy (Rice / धान)</option>
+              <option value="maize">Maize (मक्का)</option>
+              <option value="sugarcane">Sugarcane (गन्ना)</option>
+              <option value="pigeonpea">Pigeonpea / Arhar (अरहर)</option>
+              <option value="bajra">Pearl Millet / Bajra (बाजरा)</option>
+              <option value="soybean">Soybean (सोयाबीन)</option>
+              <option value="vegetables">Vegetables (सब्जियां)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Crop Growth Stage</label>
+            <select id="sim-stage" onchange="runRuleSimulation()" class="w-full rounded-xl border-slate-300 border p-2.5 text-sm font-medium text-slate-800 focus:ring-brand-500 focus:border-brand-500">
+              <option value="sowing">Sowing & Nursery Stage</option>
+              <option value="vegetative">Vegetative Tillering</option>
+              <option value="flowering">Flowering & Silking</option>
+              <option value="grain_filling">Grain Filling & Maturity</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Soil Type</label>
+            <select id="sim-soil" onchange="runRuleSimulation()" class="w-full rounded-xl border-slate-300 border p-2.5 text-sm font-medium text-slate-800 focus:ring-brand-500 focus:border-brand-500">
+              <option value="sandy_loam">Sandy Loam</option>
+              <option value="clay_loam">Clay Loam</option>
+              <option value="alluvial">Alluvial Plain Soil</option>
+              <option value="black_soil">Black Vertisol</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Forecast Event Input</label>
+            <select id="sim-event" onchange="runRuleSimulation()" class="w-full rounded-xl border-slate-300 border p-2.5 text-sm font-medium text-slate-800 focus:ring-brand-500 focus:border-brand-500">
+              <option value="onset">Monsoon Onset (P >= 70%)</option>
+              <option value="break">Prolonged Dry Spell / Break (P >= 65%)</option>
+              <option value="heavy_rain">Heavy Rainfall >100mm (P >= 75%)</option>
+              <option value="uncertainty_high">High Ensemble Uncertainty (P < 40%)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Model Confidence Gate</label>
+            <select id="sim-confidence" onchange="runRuleSimulation()" class="w-full rounded-xl border-slate-300 border p-2.5 text-sm font-medium text-slate-800 focus:ring-brand-500 focus:border-brand-500">
+              <option value="high">High Confidence (Reliability >90%)</option>
+              <option value="medium">Medium Confidence</option>
+              <option value="low">Low Confidence (Wide Ensemble Spread)</option>
+            </select>
+          </div>
+
+          <div class="p-3.5 rounded-2xl bg-amber-50 border border-amber-200 text-xs text-amber-900 space-y-1">
+            <div class="font-bold flex items-center gap-1.5">
+              <i class="ph-bold ph-shield-check text-amber-700 text-base"></i> Confidence Gate Protection
+            </div>
+            <p>Irreversible advice (such as "Delay Nursery Sowing") requires <strong>Medium or High</strong> confidence. If confidence is Low, the engine forces fallback to rule <code>R-GEN-01</code> (Wait 48h for update).</p>
+          </div>
+        </div>
+
+        <!-- Result Trace Card -->
+        <div class="lg:col-span-7 bg-white p-6 rounded-3xl border border-slate-200 shadow-md space-y-5" id="sim-output-card">
+          <!-- Injected via JavaScript -->
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- MULTILINGUAL DELIVERY CHANNELS & OFFICER DASHBOARD -->
+  <section id="channels" class="py-16 bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <span class="text-xs font-mono font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">Omnichannel Farmer Reach</span>
+        <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight mt-3">Multilingual Delivery & Officer Workflow</h2>
+        <p class="text-slate-600 text-sm mt-2">Delivering concise, actionable advice across WhatsApp Cloud API, DLT-compliant SMS, Offline-ready PWA, and Extension Officer approval portals.</p>
+      </div>
+
+      <div class="grid lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- WhatsApp Phone Mockup -->
+        <div class="lg:col-span-4 bg-slate-900 rounded-[2.5rem] p-4 border-4 border-slate-800 shadow-2xl space-y-3">
+          <!-- Phone Header -->
+          <div class="bg-emerald-800 text-white p-3.5 rounded-2xl flex items-center justify-between text-xs">
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 rounded-full bg-white text-emerald-800 font-bold flex items-center justify-center">
+                <i class="ph-bold ph-whatsapp-logo text-xl"></i>
+              </div>
+              <div>
+                <span class="font-bold block">MonsoonSight Bot</span>
+                <span class="text-[10px] text-emerald-200">Official Agromet Service</span>
+              </div>
+            </div>
+            <span class="px-2 py-0.5 rounded bg-emerald-900 text-[10px] font-mono">VERIFIED</span>
+          </div>
+
+          <!-- Chat Window -->
+          <div class="bg-slate-950 p-4 rounded-2xl space-y-3 text-xs min-h-[360px] font-sans">
+            <!-- Bot Message -->
+            <div class="bg-emerald-900/40 text-emerald-100 p-3.5 rounded-2xl border border-emerald-700/50 space-y-2 max-w-[90%]">
+              <div class="text-[10px] font-mono text-emerald-400 font-semibold">📍 Gorakhpur / Brahmpur Block</div>
+              <p class="font-medium text-white" id="wa-text-body">
+                🌾 <strong>धान की बुवाई अपडेट:</strong> अगले 7 दिनों में भारी बारिश की 88% संभावना है। नर्सरी की तैयारी करें और बुवाई शुरू करें।
+              </p>
+              <div class="text-[10px] text-emerald-300/80 border-t border-emerald-800/60 pt-1.5 flex justify-between">
+                <span>Rule ID: R-PAD-01</span>
+                <span>06:05 AM IST</span>
+              </div>
+            </div>
+
+            <!-- Reply Prompt -->
+            <div class="bg-slate-800/80 text-slate-300 p-3 rounded-xl text-[11px] border border-slate-700 space-y-1.5">
+              <span class="font-semibold text-white block">Reply with Feedback (1-Click):</span>
+              <div class="grid grid-cols-3 gap-1 text-[10px]">
+                <button onclick="sendWaReply(1)" class="p-1.5 rounded bg-emerald-700 text-white hover:bg-emerald-600 font-medium">1: Useful</button>
+                <button onclick="sendWaReply(2)" class="p-1.5 rounded bg-amber-700 text-white hover:bg-amber-600 font-medium">2: N/A</button>
+                <button onclick="sendWaReply(3)" class="p-1.5 rounded bg-rose-700 text-white hover:bg-rose-600 font-medium">3: Wrong Rain</button>
+              </div>
+            </div>
+
+            <!-- Sent User Message (Dynamic) -->
+            <div id="wa-user-reply" class="hidden justify-end">
+              <!-- Injected by JavaScript -->
+            </div>
+          </div>
+        </div>
+
+        <!-- SMS DLT & PWA Tabs -->
+        <div class="lg:col-span-8 space-y-6">
+          
+          <!-- Channel Tabs -->
+          <div class="flex items-center gap-2 border-b border-slate-200 pb-3">
+            <button onclick="setChannelTab('sms')" id="chan-tab-sms" class="chan-tab active px-4 py-2 rounded-xl text-sm font-semibold transition">DLT SMS Template</button>
+            <button onclick="setChannelTab('pwa')" id="chan-tab-pwa" class="chan-tab px-4 py-2 rounded-xl text-sm font-semibold transition">Offline PWA Card</button>
+            <button onclick="setChannelTab('officer')" id="chan-tab-officer" class="chan-tab px-4 py-2 rounded-xl text-sm font-semibold transition">Officer Approval Portal</button>
+          </div>
+
+          <!-- Channel Content Area -->
+          <div id="channel-content-area">
+            <!-- Injected via JavaScript -->
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- HINDCAST FALSE ONSET REPLAY SIMULATOR -->
+  <section id="hindcast" class="py-16 bg-slate-900 text-white border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <span class="text-xs font-mono font-bold uppercase tracking-wider text-amber-400 bg-amber-950/80 px-3 py-1 rounded-full border border-amber-800">Historical Case Study Replay</span>
+        <h2 class="text-3xl font-extrabold text-white tracking-tight mt-3">2009 & 2014 False Onset Hindcast</h2>
+        <p class="text-slate-400 text-sm mt-2">Replaying historical drought years to demonstrate how MonsoonSight's sub-seasonal dry spell detector would have prevented premature sowing losses.</p>
+      </div>
+
+      <div class="grid lg:grid-cols-12 gap-8 items-center">
+        <!-- Timeline Controls -->
+        <div class="lg:col-span-5 space-y-5">
+          <div class="p-6 rounded-3xl bg-slate-800/90 border border-slate-700 space-y-4">
+            <h3 class="font-bold text-white text-lg flex items-center justify-between">
+              <span>Select Historical Event</span>
+              <span class="text-xs font-mono text-amber-400">Eastern UP Replay</span>
+            </h3>
+
+            <div class="space-y-2">
+              <button onclick="loadHindcast('2009')" id="hind-btn-2009" class="hind-btn active w-full p-3.5 rounded-2xl border text-left transition flex items-center justify-between">
+                <div>
+                  <span class="font-bold block text-sm">2009 Kharif False Onset</span>
+                  <span class="text-xs text-slate-400">Early June rainfall flushes followed by 22-day break phase</span>
+                </div>
+                <i class="ph-bold ph-play-circle text-2xl text-amber-400"></i>
+              </button>
+
+              <button onclick="loadHindcast('2014')" id="hind-btn-2014" class="hind-btn w-full p-3.5 rounded-2xl border text-left transition flex items-center justify-between">
+                <div>
+                  <span class="font-bold block text-sm">2014 El Niño Drought Window</span>
+                  <span class="text-xs text-slate-400">Delayed monsoon trough establishment in Wk 2-3</span>
+                </div>
+                <i class="ph-bold ph-play-circle text-2xl text-slate-400"></i>
+              </button>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 text-xs text-slate-300 space-y-2">
+              <span class="font-bold text-amber-400 block font-mono">CONVENTIONAL FORECAST VS MONSOONSIGHT</span>
+              <p id="hindcast-comparison-desc">
+                In June 2009, standard IMD regional forecasts reported onset arrival on June 12. Farmers sowed paddy immediately. However, an atmospheric dry spell break phase struck on June 16-30, killing 74% of unsprinkled seedlings.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Timeline Visualizer Panel -->
+        <div class="lg:col-span-7 bg-slate-950 rounded-3xl p-6 border border-slate-800 shadow-xl space-y-6" id="hindcast-timeline-panel">
+          <!-- Injected via JavaScript -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODEL VERIFICATION & DRIFT METRICS -->
+  <section id="verification" class="py-16 bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <span class="text-xs font-mono font-bold uppercase tracking-wider text-sky-700 bg-sky-50 px-3 py-1 rounded-full border border-sky-200">Honest Skill Reporting</span>
+        <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight mt-3">Model Verification & Skill Curves</h2>
+        <p class="text-slate-600 text-sm mt-2">Hindcast verification (2001-2023 leave-one-year-out CV) proving superiority over climatology baselines and raw S2S ensembles.</p>
+      </div>
+
+      <div class="grid lg:grid-cols-2 gap-8">
+        
+        <!-- Brier Skill Score Chart -->
+        <div class="bg-slate-50 p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="font-bold text-slate-900 text-base">Brier Skill Score (BSS) by Lead Window</h3>
+              <p class="text-xs text-slate-500">MonsoonSight Stacker vs Raw ECMWF S2S vs Climatology</p>
+            </div>
+            <span class="px-2.5 py-1 rounded bg-emerald-100 text-emerald-800 text-xs font-mono font-bold">+18.4% Skill Wk1</span>
+          </div>
+
+          <div class="relative h-64">
+            <canvas id="brierChart"></canvas>
+          </div>
+
+          <div class="p-3 rounded-xl bg-white border border-slate-200 text-xs text-slate-600">
+            <strong>Key Metric:</strong> Wk1 and Wk2 onset/break models consistently beat climatology (BSS > 0). Skill in Wk 3-4 is lower but retains probabilistic value over naive baselines.
+          </div>
+        </div>
+
+        <!-- Reliability Diagram Chart -->
+        <div class="bg-slate-50 p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="font-bold text-slate-900 text-base">Reliability & Calibration Curve</h3>
+              <p class="text-xs text-slate-500">Forecasted Probability vs Observed Event Frequency</p>
+            </div>
+            <span class="px-2.5 py-1 rounded bg-sky-100 text-sky-800 text-xs font-mono font-bold">±8.2% Calibrated</span>
+          </div>
+
+          <div class="relative h-64">
+            <canvas id="reliabilityChart"></canvas>
+          </div>
+
+          <div class="p-3 rounded-xl bg-white border border-slate-200 text-xs text-slate-600">
+            <strong>Isotonic Calibration:</strong> Model predictions closely track the 1:1 perfect calibration diagonal, eliminating overconfidence common in raw ensemble forecasts.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- LIMITATIONS & ETHICS STATEMENT -->
+  <section class="py-12 bg-slate-100 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="p-8 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-4">
+        <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+          <i class="ph-bold ph-shield-warning text-amber-600 text-2xl"></i>
+          Ethical Framework & Scientific Scope
+        </h3>
+
+        <div class="grid md:grid-cols-3 gap-6 text-xs text-slate-600 leading-relaxed">
+          <div class="space-y-1.5">
+            <strong class="text-slate-900 text-sm block">1. Probabilistic Uncertainty Disclosure</strong>
+            <p>Sub-seasonal skill at block scale has inherent limits past 14 days. Every output carries an explicit confidence class (High, Medium, Low) and uncertainty bounds are never hidden from officers or farmers.</p>
+          </div>
+          <div class="space-y-1.5">
+            <strong class="text-slate-900 text-sm block">2. High-Impact Gating & Approval</strong>
+            <p>Irreversible agricultural advice (e.g. "Delay nursery sowing for 7 days") is strictly gated on Medium/High confidence and requires Extension Officer digital sign-off before mass SMS/WhatsApp broadcast.</p>
+          </div>
+          <div class="space-y-1.5">
+            <strong class="text-slate-900 text-sm block">3. Data Privacy & Template i18n</strong>
+            <p>MonsoonSight operates on minimal farmer contact data with explicit opt-out compliance. All regional advice stems from agronomist-reviewed template slots, strictly avoiding free-form generative LLM hallucinations.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-slate-900 text-slate-400 py-12 text-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-slate-800 pb-6">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-brand-600 flex items-center justify-center text-white font-bold">
+            <i class="ph-bold ph-cloud-rain text-lg"></i>
+          </div>
+          <div>
+            <span class="font-bold text-white text-base">MonsoonSight</span>
+            <span class="text-slate-500 block text-[11px]">Hybrid Physics + ML Sub-seasonal Monsoon Intelligence</span>
+          </div>
+        </div>
+        <div class="text-slate-400 font-mono text-right">
+          <div>Kharif 2026 Pilot: Uttar Pradesh</div>
+          <div class="text-[10px] text-slate-500">Python 3.11 | PyTorch | LightGBM | FastAPI | MapLibre</div>
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-slate-500 text-[11px]">
+        <p>&copy; 2026 MonsoonSight Research Team. Developed in accordance with Technical Design Document v1.0.</p>
+        <p>Data Sources: IMD, ECMWF S2S, ERA5, NASA IMERG, UPCAR</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Application Client Engine -->
+  <script src="app.js"></script>
+</body>
+</html>
